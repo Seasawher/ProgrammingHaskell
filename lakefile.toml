@@ -1,6 +1,0 @@
-name = "ProgrammingHaskell"
-version = "0.1.0"
-defaultTargets = ["ProgrammingHaskell"]
-
-[[lean_lib]]
-name = "ProgrammingHaskell"
