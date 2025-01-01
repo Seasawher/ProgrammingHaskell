@@ -47,17 +47,27 @@ def Op.apply (op : Op) (x y : Pos) : Nat :=
   | Op.mul => x.val * y.val
   | Op.div => x.val / y.val
 
+/-- `x : Pos` をゴールおよび仮定から消してしまって、`x : Nat` と `x.pos : x > 0` にバラす。 -/
+macro "unfold_pos" x:ident : tactic => `(tactic| with_reducible
+  all_goals
+    have $(Lean.mkIdent <| x.getId ++ `pos) : Subtype.val $x > 0 := Subtype.property $x
+    generalize hx : Subtype.val $x = $(Lean.mkIdent x.getId)
+    simp only [hx] at *
+    clear hx
+)
+
 /-- `op.valid x y` が成立しているならば、`op.apply x y` は正の数 -/
 theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y > 0 := by
-  have xpos : x.val > 0 := x.property
-  have ypos : y.val > 0 := y.property
-  dsimp [Op.apply, Op.valid] at h ⊢
+  dsimp [Op.apply, Op.valid] at *
   cases op <;> dsimp at *
-  all_goals
-    generalize hx : x.val = x; simp only [hx] at xpos h ⊢; clear hx
-    generalize hy : y.val = y; simp only [hy] at ypos h ⊢; clear hy
+
+  -- `x y : Pos` を正という情報だけ取り出して展開して、`x y : Nat` にする。
+  -- これで `Pos` の項を消すことができる。
+  unfold_pos x
+  unfold_pos y
+
   case add => omega
-  case mul => exact Nat.mul_pos xpos ypos
+  case mul => apply Nat.mul_pos <;> assumption
   case sub =>
     have : x > y := by simp_all
     omega
