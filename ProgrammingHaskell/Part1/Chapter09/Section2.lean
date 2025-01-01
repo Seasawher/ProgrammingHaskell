@@ -84,7 +84,7 @@ theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y 
       have : y ∣ x := by
         apply Nat.dvd_of_mod_eq_zero
         simp_all
-      simp [Nat.mul_div_cancel' (by assumption)]
+      simp [Nat.mul_div_cancel' this]
     rw [hyp, Nat.mul_zero] at this
     omega
 
