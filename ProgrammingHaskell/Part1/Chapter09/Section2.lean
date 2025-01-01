@@ -49,30 +49,27 @@ def Op.apply (op : Op) (x y : Pos) : Nat :=
 
 /-- `op.valid x y` が成立しているならば、`op.apply x y` は正の数 -/
 theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y > 0 := by
-  dsimp [Op.apply]
-  cases op
-  case add =>
-    dsimp
-    omega
-  case mul =>
-    dsimp
-    have xpos : x.val > 0 := x.property
-    have ypos : y.val > 0 := y.property
-    exact Nat.mul_pos xpos ypos
+  have xpos : x.val > 0 := x.property
+  have ypos : y.val > 0 := y.property
+  dsimp [Op.apply, Op.valid] at h ⊢
+  generalize hx : x.val = xₚ; simp only [hx] at xpos ⊢
+  generalize hy : y.val = yₚ; simp only [hy] at ypos ⊢
+  cases op <;> dsimp at *
+  case add => omega
+  case mul => exact Nat.mul_pos xpos ypos
   case sub =>
-    dsimp [Op.valid] at h ⊢
-    have : x.val > y.val := by simp_all
+    have : xₚ > yₚ := by simp_all
     omega
   case div =>
-    dsimp [Op.valid] at h ⊢
-    have div : x.val % y.val = 0 := by simp_all
-    replace div : y.val ∣ x.val := by exact Nat.dvd_of_mod_eq_zero div
-    have xpos : x.val > 0 := x.property
-    have : x.val = y.val * (x.val / y.val) := by exact Eq.symm (Nat.mul_div_cancel' div)
-    suffices hyp : x.val / y.val ≠ 0 from by
+    suffices hyp : xₚ / yₚ ≠ 0 from by
       exact Nat.zero_lt_of_ne_zero hyp
     intro hyp
-    simp [hyp] at this
+    have : yₚ * (xₚ / yₚ) = xₚ := by
+      have : yₚ ∣ xₚ := by
+        apply Nat.dvd_of_mod_eq_zero
+        simp_all
+      simp [Nat.mul_div_cancel' (by assumption)]
+    rw [hyp, Nat.mul_zero] at this
     omega
 
 /-- `Op.apply` の返り値が `Pos` になっているバージョン -/
