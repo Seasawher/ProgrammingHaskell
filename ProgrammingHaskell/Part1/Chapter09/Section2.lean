@@ -52,20 +52,21 @@ theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y 
   have xpos : x.val > 0 := x.property
   have ypos : y.val > 0 := y.property
   dsimp [Op.apply, Op.valid] at h ⊢
-  generalize hx : x.val = xₚ; simp only [hx] at xpos ⊢
-  generalize hy : y.val = yₚ; simp only [hy] at ypos ⊢
   cases op <;> dsimp at *
+  all_goals
+    generalize hx : x.val = x; simp only [hx] at xpos h ⊢; clear hx
+    generalize hy : y.val = y; simp only [hy] at ypos h ⊢; clear hy
   case add => omega
   case mul => exact Nat.mul_pos xpos ypos
   case sub =>
-    have : xₚ > yₚ := by simp_all
+    have : x > y := by simp_all
     omega
   case div =>
-    suffices hyp : xₚ / yₚ ≠ 0 from by
+    suffices hyp : x / y ≠ 0 from by
       exact Nat.zero_lt_of_ne_zero hyp
     intro hyp
-    have : yₚ * (xₚ / yₚ) = xₚ := by
-      have : yₚ ∣ xₚ := by
+    have : y * (x / y) = x := by
+      have : y ∣ x := by
         apply Nat.dvd_of_mod_eq_zero
         simp_all
       simp [Nat.mul_div_cancel' (by assumption)]
