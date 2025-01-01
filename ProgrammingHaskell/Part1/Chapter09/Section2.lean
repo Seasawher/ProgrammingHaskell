@@ -47,14 +47,19 @@ def Op.apply (op : Op) (x y : Pos) : Nat :=
   | Op.mul => x.val * y.val
   | Op.div => x.val / y.val
 
+open Lean in
+
 /-- `x : Pos` をゴールおよび仮定から消してしまって、`x : Nat` と `x.pos : x > 0` にバラす。 -/
-macro "unfold_pos" x:ident : tactic => `(tactic| with_reducible
-  all_goals
-    have $(Lean.mkIdent <| x.getId ++ `pos) : Subtype.val $x > 0 := Subtype.property $x
-    generalize hx : Subtype.val $x = $(Lean.mkIdent x.getId)
-    simp only [hx] at *
-    clear hx
-)
+macro "unfold_pos" x:ident : tactic => do
+  let x' := mkIdent x.getId
+  let x'pos := mkIdent (x.getId ++ `pos)
+  let tacSeq ← `(tactic| with_reducible
+    all_goals
+      have $x'pos : Subtype.val $x > 0 := Subtype.property $x
+      generalize hx : Subtype.val $x = $x'
+      simp only [hx] at *
+      clear hx)
+  return tacSeq
 
 /-- `op.valid x y` が成立しているならば、`op.apply x y` は正の数 -/
 theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y > 0 := by
