@@ -17,9 +17,9 @@ private def «1 + (2 * 3)» : Expr :=
 -- `target := 7` で定義される問題の解になっている
 #guard «1 + (2 * 3)».solution [1, 2, 3, 8, 13] 7
 
-private def «(1 + 50) * (25 - 10)» : Expr :=
-  Expr.app mul (app add (val 1) (val 50)) (app sub (val 25) (val 10))
+private def «(25 - 10) * (1 + 50)» : Expr :=
+  Expr.app mul (app sub (val 25) (val 10)) (app add (val 1) (val 50))
 
-#guard «(1 + 50) * (25 - 10)».solution [1, 3, 7, 10, 25, 50] 765
+#guard «(25 - 10) * (1 + 50)».solution [1, 3, 7, 10, 25, 50] 765
 
 end «`Expr.solution` 関数のテスト»

@@ -28,10 +28,20 @@ instance {n : Nat} : OfNat Pos (n + 1) := ⟨Pos.ofNat (n + 1)⟩
 
 instance : ToString Pos := inferInstance
 
+/-- **Note** 9.9 における追記。
+演算の可換性や単位元の法則を使って式を絞り込む valid -/
+def Op.valid' (op : Op) (x y : Pos) : Bool :=
+  match op with
+  | Op.add => x.val ≤ y.val
+  | Op.sub => x.val > y.val
+  | Op.mul => x.val != 1 && y.val != 1 && x.val ≤ y.val
+  | Op.div => y.val != 1 && x.val % y.val == 0
+
 /-- `op` を適用したときに正の整数が生成されるかどうかチェックする
 
 **Note** 本では引数の型は `Int` になっているが、文脈からして型は `Pos` であるべきだと考えられる。
 -/
+@[implemented_by Op.valid']
 def Op.valid (op : Op) (x y : Pos) : Bool :=
   match op with
   | Op.add => true
@@ -89,5 +99,5 @@ theorem Op.pos_of_valid (op : Op) (x y : Pos) (h : op.valid x y) : op.apply x y 
     omega
 
 /-- `Op.apply` の返り値が `Pos` になっているバージョン -/
-def Op.vapply (op : Op) (x y : Pos) (h : op.valid x y) : Pos :=
+def Op.vapply (op : Op) (x y : Pos) (h : op.valid x y := by assumption) : Pos :=
   ⟨op.apply x y, Op.pos_of_valid op x y h⟩

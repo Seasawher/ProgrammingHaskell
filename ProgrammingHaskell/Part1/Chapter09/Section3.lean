@@ -44,6 +44,6 @@ def Expr.eval : Expr → Option Pos
     let x ← l.eval
     let y ← r.eval
     if h : op.valid x y then
-      op.vapply x y h
+      op.vapply x y
     else
       none

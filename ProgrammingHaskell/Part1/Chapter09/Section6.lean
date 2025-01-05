@@ -43,16 +43,16 @@ where
 
 #guard [1, 2, 3].exprs.length = 32
 
+instance instAlternative : Alternative List where
+  failure := @List.nil
+  orElse l l' := List.append l (l' ())
+
 /-- カウントダウン問題に対して、可能な解をすべて求める -/
 def Expr.solutions (nums : List Pos) (target : Pos) : List Expr := do
   let nums' ← nums.choices
   let e ← nums'.exprs
-  if e.eval != target then []
+  guard <| e.eval == target
   return e
-
-/-- info: [1+9, 9+1] -/
-#guard_msgs in
-  #eval Expr.solutions [1, 9] 10
 
 -- インタプリンタでは重すぎて実行できない
 -- #eval Expr.solutions [1, 3, 7, 10, 25, 50] 765
