@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section5
+import ProgrammingHaskell.Chapter09.Section5
 
 instance : Monad List where
   pure := List.singleton

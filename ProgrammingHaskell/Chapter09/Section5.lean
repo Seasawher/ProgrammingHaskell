@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section4
+import ProgrammingHaskell.Chapter09.Section4
 
 /-- 与えられた式 `expr : Expr` が `inputs` と `target` の定義する
 カウントダウン問題の解になっているかどうか判定する -/

@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section6
+import ProgrammingHaskell.Chapter09.Section6
 
 /-- 証明に対する sorryAx -/
 axiom sorryProofAx {P : Prop} : P

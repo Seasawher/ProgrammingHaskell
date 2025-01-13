@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section2
+import ProgrammingHaskell.Chapter09.Section2
 
 /-- 途中に現れる可能性のある数式 -/
 inductive Expr where

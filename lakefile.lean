@@ -9,10 +9,10 @@ package «ProgrammingHaskell» where
   ]
 
 lean_exe countdown where
-  root := `ProgrammingHaskell.Part1.Chapter09.Section7
+  root := `ProgrammingHaskell.Chapter09.Section7
 
 lean_exe countdown_2 where
-  root := `ProgrammingHaskell.Part1.Chapter09.Section8Exe
+  root := `ProgrammingHaskell.Chapter09.Section8Exe
 
 @[default_target]
 lean_lib ProgrammingHaskell where

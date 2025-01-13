@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section3
+import ProgrammingHaskell.Chapter09.Section3
 
 /-- 与えられたリストの部分リストを全て返す -/
 def List.subs {α : Type} : List α → List (List α)
@@ -36,4 +36,3 @@ def List.choices {α : Type} : List α → List (List α) :=
 
 #guard [1, 2].choices = [[], [2], [1], [1, 2], [2, 1]]
 #guard [1, 2, 3].choices.length = 16
-

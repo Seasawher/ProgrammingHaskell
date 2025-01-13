@@ -1,4 +1,4 @@
-import ProgrammingHaskell.Part1.Chapter09.Section6
+import ProgrammingHaskell.Chapter09.Section6
 
 /-- インタプリンタでは重いのでコンパイラで実行 -/
 def main : IO Unit :=
