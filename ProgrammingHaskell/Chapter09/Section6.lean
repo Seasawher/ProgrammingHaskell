@@ -37,9 +37,9 @@ where
     let op ← Op.asList
     return Expr.app op l r
 
-/-- info: [1+2, 1-2, 1*2, 1/2] -/
+/-- info: ["1+2", "1-2", "1*2", "1/2"] -/
 #guard_msgs in
-  #eval [1, 2].exprs
+  #eval [1, 2].exprs |>.map toString
 
 #guard [1, 2, 3].exprs.length = 32
 
