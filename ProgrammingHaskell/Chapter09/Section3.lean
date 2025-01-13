@@ -68,8 +68,17 @@ namespace Expr
   #guard toString expr!{1 + 2 * 3} = "1+(2*3)"
   #guard toString expr!{1 + (2 + 3 * 4)} = "1+(2+(3*4))"
   #guard toString expr!{(1 + 3) / 2} = "(1+3)/2"
-end Expr
 
+  /- ## Repr インスタンスを定義する -/
+
+  instance : Repr Expr where
+    reprPrec e _ := s!"expr!\{{toString e}}"
+
+  -- Repr インスタンスのテスト
+  /-- info: expr!{1+(2*3)} -/
+  #guard_msgs in
+    #eval expr!{1 + 2 * 3}
+end Expr
 
 /-- 式の中に含まれる数値をリストにして返す -/
 def Expr.values : Expr → List Pos
