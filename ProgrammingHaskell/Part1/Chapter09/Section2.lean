@@ -9,13 +9,14 @@ inductive Op where
   /-- 除法 -/
   | div
 
-private def Op.toString : Op → String
-  | Op.add => "+"
-  | Op.sub => "-"
-  | Op.mul => "*"
-  | Op.div => "/"
-
-instance : ToString Op := ⟨Op.toString⟩
+instance : ToString Op :=
+  ⟨Op.toString⟩
+where
+  Op.toString : Op → String
+    | Op.add => "+"
+    | Op.sub => "-"
+    | Op.mul => "*"
+    | Op.div => "/"
 
 /-- 正の自然数。途中の状態として許可されるのは正の自然数のみ。 -/
 abbrev Pos := { n : Nat // n > 0 }
