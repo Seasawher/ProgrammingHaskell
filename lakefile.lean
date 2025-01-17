@@ -16,4 +16,4 @@ lean_exe countdown_2 where
 
 @[default_target]
 lean_lib ProgrammingHaskell where
-  globs := #[.submodules `ProgrammingHaskell]
+  globs := #[.submodules `ProgrammingHaskell, .submodules `MyStd]
