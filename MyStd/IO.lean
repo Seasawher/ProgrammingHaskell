@@ -8,8 +8,8 @@ def IO.getInputln : IO String := do
 def IO.getInput : IO String := do
   return removeBr (← getInputln)
 where
-  removeBr : String → String :=
+  removeBr (str : String) : String := Id.run do
     if System.Platform.isWindows then
-      (String.replace · "\r" "") ∘ (String.replace · "\n" "")
+      str.dropRight 2
     else
-      (String.replace · "\n" "")
+      str.dropRight 1
