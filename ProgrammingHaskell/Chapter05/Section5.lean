@@ -1,8 +1,10 @@
+import Batteries.Data.String.Basic
+
 /-- アルファベットの小文字 -/
 abbrev LowerLetter := { c : Char // c.isLower }
 
 /-- アルファベットの小文字 -/
-def LowerLetter.asArray :=
+def LowerLetter.asArray : Array Char :=
   #['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
   'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
   'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ]
@@ -23,7 +25,6 @@ def int2let (n : Nat) : Char :=
 
 #guard int2let 0 = 'a'
 #guard int2let 25 = 'z'
-
 
 /-- アルファベットの小文字を`n`だけシフトする -/
 def Char.shift (c : Char) (n : Int) : Char :=
@@ -60,3 +61,14 @@ def Char.freq (c : Char) : Float :=
     table.get! (let2int c)
   else
     0.0
+
+/-- 文字列の中の各アルファベットの出現頻度を調べる -/
+def String.freqs (s : String) : Array Float :=
+  let n := s.length.toFloat
+  LowerLetter.asArray |>.map (fun c =>
+    let count := (s.count c).toFloat
+    count / n
+  )
+
+#guard "abbcccddddeeeee".freqs[0] < 0.067
+

@@ -14,6 +14,8 @@ lean_exe countdown where
 lean_exe countdown_2 where
   root := `ProgrammingHaskell.Chapter09.Section8Exe
 
+require "leanprover-community" / "batteries" @ git "main"
+
 @[default_target]
 lean_lib ProgrammingHaskell where
   globs := #[.submodules `ProgrammingHaskell, .submodules `MyStd]
