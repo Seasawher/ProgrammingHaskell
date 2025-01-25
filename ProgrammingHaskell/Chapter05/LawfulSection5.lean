@@ -6,15 +6,15 @@ namespace LowerLetter
   -- ## `UInt32` への変換を行う関数
 
   /-- 範囲証明付きの`UInt32`への変換 -/
-  def toUInt32 (c : LowerLetter) : { u : UInt32 // u ≥ 97 && u ≤ 122 } :=
+  def toUInt32ₛ (c : LowerLetter) : { u : UInt32 // u ≥ 97 && u ≤ 122 } :=
     ⟨Char.val c, by
       have := c.property
       simp_all [Char.isLower]
     ⟩
 
   /-- 範囲証明なしの`UInt32`への変換 -/
-  def toUInt32! (c : LowerLetter) : UInt32 :=
-    (toUInt32 c).val
+  def toUInt32 (c : LowerLetter) : UInt32 :=
+    (toUInt32ₛ c).val
 
 end LowerLetter
 
@@ -22,16 +22,16 @@ end LowerLetter
 namespace LowerLetter
   -- ## `UInt32` から `LowerLetter` への変換を行う関数
 
+  private def _root_.Char.ofUInt32? (u : UInt32) : Option Char :=
+    if h : u.isValidChar then some ⟨u, h⟩ else none
+
+  private def ofChar? (c : Char) : Option LowerLetter :=
+    if h : c.isLower then some ⟨c, h⟩ else none
+
   /-- `UInt32`から`LowerLetter`への変換 -/
-  def ofUInt32? (u : UInt32) : Option LowerLetter :=
-    if h : u.isValidChar then
-      let char : Char := ⟨u, h⟩
-      if range : char.isLower then
-        some ⟨char, range⟩
-      else
-        none
-    else
-      none
+  def ofUInt32? (u : UInt32) : Option LowerLetter := do
+    let char ← Char.ofUInt32? u
+    ofChar? char
 
   -- instance : Coe UInt32 Nat := ⟨UInt32.toNat⟩
   -- attribute [coe] UInt32.toNat
