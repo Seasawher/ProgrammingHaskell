@@ -48,12 +48,12 @@ def String.encode (s : String) (n : Int) : String :=
 
 /-- アルファベットの出現頻度表 -/
 def table :=
-  #[8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0,
+  [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0,
   0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9, 0.1, 6.0,
   6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
 
 #guard table.foldl (· + ·) 0 == 100.0
-#guard table.size = 26
+#guard table.length = 26
 
 /-- 文字の出現頻度を返す関数 -/
 def Char.freq (c : Char) : Float :=
@@ -72,3 +72,22 @@ def String.freqs (s : String) : Array Float :=
 
 #guard "abbcccddddeeeee".freqs[0] < 0.067
 
+/-- χ²検定により、２つのリストの距離を測る -/
+def chisqr (os es : List Float ) : Float :=
+  os.zip es
+    |>.map (fun (o, e) => (o - e) ^ 2 / e)
+    |>.foldl (· + ·) 0.0
+
+/-- リストを左に回転させる -/
+def List.rotate {α : Type} (n : Nat) (xs : List α) : List α :=
+  xs.drop n ++ xs.take n
+
+#guard List.rotate 1 [1, 2, 3, 4, 5] = [2, 3, 4, 5, 1]
+
+def crack (s : String) : String :=
+  let table' := s.freqs
+  let chitab := List.range 26 |>.map (fun n =>
+    chisqr (table'.toList.rotate n) table
+  )
+  let factor := chitab.min?
+  sorry
