@@ -84,10 +84,34 @@ def List.rotate {α : Type} (n : Nat) (xs : List α) : List α :=
 
 #guard List.rotate 1 [1, 2, 3, 4, 5] = [2, 3, 4, 5, 1]
 
+/-- リストの最小値をそのインデックスと共に出力する -/
+def List.minIdx? {α : Type} [LE α] [DecidableLE α] (xs : List α) : Option (Nat × α) :=
+  loop xs 0
+where
+  loop : List α → Nat → Option (Nat × α)
+  | [], _ => none
+  | x :: xs, i =>
+    match loop xs (i + 1) with
+    | none => some (i, x)
+    | some (j, y) =>
+      if x ≤ y then (i, x) else some (j, y)
+
+#guard List.minIdx? [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5] = some (1, 1)
+
+/-- リストの最小値とインデックスを求める -/
+def List.minIdx! {α : Type} [LE α] [DecidableLE α] [Inhabited α] (xs : List α) : Nat × α :=
+  match xs.minIdx? with
+  | none => panic! "empty list"
+  | some x => x
+
+/-- シーザー暗号を解読する -/
 def crack (s : String) : String :=
   let table' := s.freqs
   let chitab := List.range 26 |>.map (fun n =>
     chisqr (table'.toList.rotate n) table
   )
-  let factor := chitab.min?
-  sorry
+  let (factor, _) := chitab.minIdx!
+  s.encode (-factor)
+
+#guard crack "kdvnhoo lv ixq" = "haskell is fun"
+#guard crack "ohdq lv dq dzhvrph odqjxdjh" = "lean is an awesome language"
