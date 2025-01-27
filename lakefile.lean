@@ -1,4 +1,5 @@
 import Lake
+
 open Lake DSL
 
 package «ProgrammingHaskell» where
@@ -8,13 +9,15 @@ package «ProgrammingHaskell» where
     ⟨`linter.missingDocs, true⟩
   ]
 
+require batteries from git
+  "https://github.com/leanprover-community/batteries" @ "main"
+  
 lean_exe countdown where
   root := `ProgrammingHaskell.Chapter09.Section7
 
 lean_exe countdown_2 where
   root := `ProgrammingHaskell.Chapter09.Section8Exe
 
-require "leanprover-community" / "batteries" @ git "main"
 
 @[default_target]
 lean_lib ProgrammingHaskell where

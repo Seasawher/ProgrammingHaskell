@@ -1,3 +1,5 @@
+import Batteries
+
 /-- アルファベットの小文字 -/
 abbrev LowerLetter := { c : Char // c.isLower }
 
@@ -14,7 +16,7 @@ namespace LowerLetter
 
   /-- 範囲証明なしの`UInt32`への変換 -/
   def toUInt32 (c : LowerLetter) : UInt32 :=
-    (toUInt32ₛ c).val
+    Char.val c
 
 end LowerLetter
 
@@ -33,17 +35,6 @@ namespace LowerLetter
     let char ← Char.ofUInt32? u
     ofChar? char
 
-  -- instance : Coe UInt32 Nat := ⟨UInt32.toNat⟩
-  -- attribute [coe] UInt32.toNat
-
-  -- @[simp]
-  -- theorem _root_.UInt32.le_to_nat (u v : UInt32) : u ≤ v ↔ u.toNat ≤ v.toNat := by
-  --   exact UInt32.le_iff_toNat_le
-
-  -- @[simp]
-  -- theorem _root_.UInt32.ge_to_nat (u v : UInt32) : u ≥ v ↔ u.toNat ≥ v.toNat := by
-  --   simp only [GE.ge, UInt32.le_to_nat]
-
   /-- `UInt32`から`LowerLetter`への範囲証明付きの変換 -/
   def ofUInt32 (u : UInt32) (hu : u ≥ 97 && u ≤ 122) : LowerLetter :=
     let char : Char := ⟨u, by
@@ -57,10 +48,37 @@ namespace LowerLetter
 end LowerLetter
 
 
--- /-- アルファベットの小文字を`n`だけシフトする -/
--- def Char.shift (c : LowerLetter) (n : Int) : Char :=
---   if c.isLower then
---     let code := (let2int c + n) % 26
---     int2let code.toNat
---   else
---     c
+namespace LowerLetter
+  -- ## `LowerLetter` と `Nat` の相互変換
+
+  /-- 単なる`Nat`への変換 -/
+  def toNat (c : LowerLetter) : Nat :=
+    c.val.toNat
+
+  /-- 範囲証明付の`Nat`への変換 -/
+  def toNatₛ (c : LowerLetter) : { n : Nat // n ≥ 97 && n ≤ 122 } :=
+    ⟨c.val.toNat, c.property⟩
+
+  private def _root_.Char.ofNat? (n : Nat) : Option Char :=
+    if h : (n.toUInt32).isValidChar then some ⟨n.toUInt32, h⟩ else none
+
+  /-- `Nat`から`LowerLetter`への変換 -/
+  def ofNat? (n : Nat) : Option LowerLetter := do
+    let char ← Char.ofNat? n
+    ofChar? char
+
+  example (u v : UInt32) : u ≤ v ↔ u.toNat ≤ v.toNat := by
+    exact UInt32.le_iff_toNat_le
+
+  example (u v : UInt32) : u ≥ v ↔ u.toNat ≥ v.toNat := by
+    exact UInt32.le_iff_toNat_le
+
+  theorem _root_.UInt32.ofNat_le_iff {m n : Nat} (hm : m < UInt32.size) (hn : n < UInt32.size)
+    : UInt32.ofNat m ≤ UInt32.ofNat n ↔ m ≤ n := by
+    sorry
+
+  /-- `Nat`から`LowerLetter`への範囲証明付きの変換 -/
+  def ofNat (n : Nat) (hn : n ≥ 97 && n ≤ 122) : LowerLetter :=
+    sorry
+
+end LowerLetter
