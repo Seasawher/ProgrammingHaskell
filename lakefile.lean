@@ -11,7 +11,10 @@ package «ProgrammingHaskell» where
 
 require batteries from git
   "https://github.com/leanprover-community/batteries" @ "main"
-  
+
+require plausible from git
+  "https://github.com/leanprover-community/plausible.git" @ "main"
+
 lean_exe countdown where
   root := `ProgrammingHaskell.Chapter09.Section7
 
