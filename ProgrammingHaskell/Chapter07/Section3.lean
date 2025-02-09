@@ -1,7 +1,11 @@
 import Plausible
 
 namespace Foldr
-  /- ## foldr で書ける関数たち -/
+  /- ## foldr で書ける関数たち
+
+  ### 和の計算
+  -/
+
   variable {α β : Type}
 
   /-- 和の計算 -/
@@ -9,19 +13,46 @@ namespace Foldr
     match xs with
     | [] => 0
     | x :: xs => x + sum xs
-  #check sum
 
-  -- インスタンス暗黙引数を使うことはできない？？
+  -- インスタンス暗黙引数を使うことはできない(未実装)
   #guard_msgs (drop error) in
     #test ∀{α : Type}[Zero α][Add α](xs : List α), sum xs = xs.foldr (· + ·) 0
 
   example [Zero α] [Add α] (xs : List α) : sum xs = xs.foldr (· + ·) 0 := by
-    -- plausible はなぜ使えないのだろうか？
-    fail_if_success plausible
+    -- 単に rfl としても失敗する
+    fail_if_success rfl
 
-    sorry
+    -- simp では示すことができない
+    fail_if_success simp_all [sum, List.foldr]
 
-  -- `α := Nat` とすれば使える
-  #test ∀ (xs : List Nat), sum xs = xs.foldr (· + ·) 0
+    delta sum List.foldr
+    rfl
+
+end Foldr
+
+namespace Foldr
+  /- ### List の長さの計算 -/
+
+  def length {α : Type} (xs : List α) : Nat :=
+    match xs with
+    | [] => 0
+    | _ :: xs => 1 + length xs
+
+  -- length も foldr で書くことができる！
+  example {α : Type} (xs : List α) : length xs = xs.foldr (fun _ n => 1 + n) 0 := by
+    delta length List.foldr
+    rfl
+
+  /- ### List を逆にする -/
+
+  def reverse {α : Type} (xs : List α) : List α :=
+    match xs with
+    | [] => []
+    | x :: xs => reverse xs ++ [x]
+
+  -- reverse も foldr で書くことができる！
+  example {α : Type} (xs : List α) : reverse xs = xs.foldr (fun x xs => xs ++ [x]) [] := by
+    delta reverse List.foldr
+    rfl
 
 end Foldr
