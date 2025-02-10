@@ -1,8 +1,9 @@
 import Plausible
 
 instance : Monad List where
-  pure := List.singleton
-  bind := List.flatMap
+  pure x := [x]
+  bind l f := l.flatMap f
+  map f l := l.map f
 
 namespace Map
   /- ## map の再帰を使う定義と、使わない定義を比較する -/

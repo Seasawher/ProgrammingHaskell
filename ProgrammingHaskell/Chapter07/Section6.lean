@@ -1,3 +1,4 @@
+import Plausible
 /- # 文字列の２進変換 -/
 
 /-- ビット。0か1の数字 -/
@@ -45,4 +46,7 @@ namespace Play2
 
 end Play2
 
+def make8 (bs : List Bit) : List Bit :=
+  bs ++ List.replicate (8 - bs.length) 0
 
+#eval make8 [1, 0, 1, 1] = [1, 0, 1, 1, 0, 0, 0, 0]

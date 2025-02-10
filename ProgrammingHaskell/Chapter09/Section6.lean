@@ -1,8 +1,9 @@
 import ProgrammingHaskell.Chapter09.Section5
 
 instance : Monad List where
-  pure := List.singleton
-  bind := List.flatMap
+  pure x := [x]
+  bind l f := l.flatMap f
+  map f l := l.map f
 
 /-- あるリストを（要素の順番を保ちながら）２つの空でないリストに分割するすべての方法を返す -/
 def List.split {α : Type} (xs : List α) : List (List α × List α) :=
