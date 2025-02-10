@@ -56,3 +56,4 @@ def make8 (bs : List Bit) : List Bit :=
 #guard make8 [1, 0, 1, 1] = [1, 0, 1, 1, 0, 0, 0, 0]
 
 #test ∀ (xs : List Bit), (make8 xs).length = 8
+
