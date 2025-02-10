@@ -46,7 +46,13 @@ namespace Play2
 
 end Play2
 
+/-- サイズを8ビットに固定する -/
 def make8 (bs : List Bit) : List Bit :=
-  bs ++ List.replicate (8 - bs.length) 0
+  if bs.length ≤ 8 then
+    bs ++ List.replicate (8 - bs.length) 0
+  else
+    bs.take 8
 
-#eval make8 [1, 0, 1, 1] = [1, 0, 1, 1, 0, 0, 0, 0]
+#guard make8 [1, 0, 1, 1] = [1, 0, 1, 1, 0, 0, 0, 0]
+
+#test ∀ (xs : List Bit), (make8 xs).length = 8
