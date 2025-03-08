@@ -60,12 +60,16 @@ def Parser.string (x : String) : Parser String :=
 #guard string "abc" "abcdef" = some ("abc", "def")
 #guard string "abc" "ab123" = none
 
-mutual
-  def Alternative.many {α : Type} {m : Type → Type} [Alternative m] (x : m α) : m (List α) :=
-    some x <|> pure []
+variable {α : Type}
+variable {m : Type → Type} [Alternative m]
+instance [Inhabited α] : Inhabited (m α) := ⟨pure default⟩
 
-  def Alternative.some {α : Type} {m : Type → Type} [Alternative m] (p : m α) : m (List α) :=
-    pure (· :: ·) <*> p <*> many p
+mutual
+  partial def Alternative.many (x : m α) : m (List α) :=
+    Alternative.some x <|> pure []
+
+  partial def Alternative.some (p : m α) : m (List α) :=
+    pure (· :: ·) <*> p <*> Alternative.many p
 end
 
 def Parser.space : Parser Unit := do
