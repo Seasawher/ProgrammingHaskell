@@ -59,7 +59,7 @@ where
 #guard three "ab" = none
 
 instance : Monad Parser where
-  bind := fun {α β} p f input =>
+  bind := fun {_α _β} p f input =>
     match p input with
     | none => none
     | some (v, out) => f v out

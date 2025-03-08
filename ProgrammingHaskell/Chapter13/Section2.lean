@@ -13,8 +13,8 @@ def Parser (α : Type) := String → Option (α × String)
 -/
 def Parser.item : Parser Char := fun input =>
   match input with
-  | .mk [] => none
-  | .mk (x :: xs) => some (x, ⟨xs⟩)
+  | ⟨[]⟩ => none
+  | ⟨x :: xs⟩ => some (x, ⟨xs⟩)
 
 open Parser
 
