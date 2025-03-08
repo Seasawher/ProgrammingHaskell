@@ -1,0 +1,17 @@
+name: Update Lean
+on:
+  schedule:
+    # 毎日実行
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  update_lean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Update Lean project
+        uses: Seasawher/lean-update@main
+        with:
+          update_if_modified: lean-toolchain
