@@ -72,6 +72,39 @@ mutual
     pure (· :: ·) <*> p <*> Alternative.many p
 end
 
+/-- 識別子用のパーサ -/
+def Parser.ident : Parser String := do
+  let x ← lower
+  let xs ← Alternative.many alphanum
+  return ⟨x :: xs⟩
+
+#guard ident "abc def" = some ("abc", " def")
+#guard ident "123 def" = none
+
+/-- 自然数のパーサ -/
+def Parser.nat : Parser Nat := do
+  let xs ← Alternative.some digit
+  return xs.foldl (· * 10 + ·.toNat - '0'.toNat) 0
+
+#guard nat "123 abc" = some (123, " abc")
+#guard nat "abc 123" = none
+
+/-- 空白文字のパーサ -/
 def Parser.space : Parser Unit := do
-  let _ sat Char.isWhitespace
+  let _ ← Alternative.many <| sat Char.isWhitespace
   pure ()
+
+#guard space "  abc" = some ((), "abc")
+#guard space "abc" = some ((), "abc")
+
+/-- 整数のパーサ -/
+def Parser.int : Parser Int :=
+  let negParser : Parser Int := do
+    let _ ← char '-'
+    let n : Int := (← nat)
+    return -n
+  negParser <|> (Int.ofNat <$> nat)
+
+#guard int "-123 abc" = some (-123, " abc")
+#guard int "123 abc" = some (123, " abc")
+#guard int "abc 123" = none
