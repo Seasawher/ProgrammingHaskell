@@ -3,7 +3,7 @@ import ProgrammingHaskell.Chapter13.Section7
 open Parser
 
 mutual
-
+  /-- 式のパーサ -/
   partial def expr : Parser Nat := do
     let t ← term
     let tail : Parser Nat := do
@@ -12,6 +12,7 @@ mutual
       return t + e
     tail <|> return t
 
+  /-- 項のパーサ -/
   partial def term : Parser Nat := do
     let f ← factor
     let tail : Parser Nat := do
@@ -20,6 +21,7 @@ mutual
       return f * t
     tail <|> return f
 
+  /-- 因子のパーサ -/
   partial def factor : Parser Nat := do
     let first : Parser Nat := do
       let _ ← symbol "("
@@ -30,6 +32,7 @@ mutual
 
 end
 
+/-- 文字列として与えられた式をパースして評価する -/
 def eval (input : String) : Nat :=
   match expr input with
   | some (n, ⟨[]⟩) => n
