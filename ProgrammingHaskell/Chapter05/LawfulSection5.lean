@@ -75,18 +75,11 @@ namespace LowerLetter
   example (u v : UInt32) : u ≥ v ↔ u.toNat ≥ v.toNat := by
     exact UInt32.le_iff_toNat_le
 
-  theorem _root_.UInt32.ofNat_le_iff {m n : Nat} (hm : m < UInt32.size) (hn : n < UInt32.size)
-      : UInt32.ofNat m ≤ UInt32.ofNat n ↔ m ≤ n := by
-    rw [UInt32.le_iff_toNat_le]
-    simp only [UInt32.toNat_ofNat]
-    rw [Nat.mod_eq_of_lt hm]
-    rw [Nat.mod_eq_of_lt hn]
-
   /-- `Nat`から`LowerLetter`への範囲証明付きの変換 -/
   def ofNat (n : Nat) (hn : n ≥ 97 && n ≤ 122) : LowerLetter := by
     replace hn : 97 ≤ n ∧ n ≤ 122 := by simpa using hn
     dsimp [LowerLetter]
-    let u := UInt32.ofNat' n (by simp only [UInt32.size]; omega)
+    let u := UInt32.ofNatLT n (by simp only [UInt32.size]; omega)
     have hu : u ≥ 97 && u ≤ 122 := by
       simp [u]
 
