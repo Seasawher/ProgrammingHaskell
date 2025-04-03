@@ -64,6 +64,8 @@ variable {α : Type}
 variable {m : Type → Type} [Alternative m]
 instance [Inhabited α] : Inhabited (m α) := ⟨pure default⟩
 
+set_option linter.missingDocs false in
+
 mutual
   partial def Alternative.many (x : m α) : m (List α) :=
     Alternative.some x <|> pure []

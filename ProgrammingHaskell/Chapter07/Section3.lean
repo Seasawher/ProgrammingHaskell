@@ -33,6 +33,7 @@ end Foldr
 namespace Foldr
   /- ### List の長さの計算 -/
 
+  /-- Listの長さ -/
   def length {α : Type} (xs : List α) : Nat :=
     match xs with
     | [] => 0
@@ -45,6 +46,7 @@ namespace Foldr
 
   /- ### List を逆にする -/
 
+  /-- Listを逆にする -/
   def reverse {α : Type} (xs : List α) : List α :=
     match xs with
     | [] => []

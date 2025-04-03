@@ -47,6 +47,7 @@ namespace Filter
 
 end Filter
 
+/-- 例示のための関数 -/
 def List.sseven (xs : List Nat) : Nat :=
   xs.filter (· % 2 = 0)
     |>.map (· ^ 2)

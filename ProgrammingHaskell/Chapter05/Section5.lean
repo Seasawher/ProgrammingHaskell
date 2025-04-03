@@ -58,7 +58,7 @@ def table :=
 /-- 文字の出現頻度を返す関数 -/
 def Char.freq (c : Char) : Float :=
   if c.isLower then
-    table.get! (let2int c)
+    table[let2int c]!
   else
     0.0
 

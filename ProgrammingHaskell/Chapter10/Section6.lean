@@ -1,5 +1,7 @@
 import MyStd.IO
 
+set_option linter.missingDocs false
+
 def sgetLine : IO String := do
   let x ← IO.getInput
   if x == "\n" then
@@ -9,4 +11,3 @@ def sgetLine : IO String := do
 
 def hangman : IO Unit := do
   IO.println "Think of a word:"
-

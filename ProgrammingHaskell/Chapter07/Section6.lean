@@ -4,6 +4,7 @@ import Plausible
 /-- ビット。0か1の数字 -/
 abbrev Bit := Nat
 
+/-- unfold関数 -/
 def List.unfold {α β : Type} (f : β → Option (α × β)) (b : β) : List α :=
   helper f b []
 where
@@ -56,4 +57,3 @@ def make8 (bs : List Bit) : List Bit :=
 #guard make8 [1, 0, 1, 1] = [1, 0, 1, 1, 0, 0, 0, 0]
 
 #test ∀ (xs : List Bit), (make8 xs).length = 8
-
